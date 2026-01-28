@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Репетитор Английского и Испанского | Портфолио</title>
+    
+    <!-- Tailwind CSS with Custom Color Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bone: '#F2EFE7',       // Elephant Bone (Background)
+                        steeped: '#2A1F1A',    // Steeped Brown (Text)
+                        willow: '#3c1716',     // Willow Brown (Accents)
+                        burgundy: '#560319',   // Deep Red (Buttons)
+                        burgundyHover: '#3e0212',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #F2EFE7; /* bone */
+            color: #2A1F1A; /* steeped */
+        }
+        
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; 
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .nav-item {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active {
+            color: #560319; /* burgundy */
+            border-bottom-color: #560319;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(42, 31, 26, 0.1), 0 4px 6px -2px rgba(42, 31, 26, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #F2EFE7; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #3c1716; 
+            border-radius: 4px;
+        }
+    </style>
+
+    <!-- Application Structure Plan: 
+         - Updated palette applied globally.
+         - Background: Elephant Bone (#F2EFE7) for a warm, paper-like feel.
+         - Buttons: Burgundy (#560319) for high contrast and elegance.
+         - Text: Steeped Brown (#2A1F1A) for softer reading than black.
+         - Accents: Willow Brown (#3c1716) for subtle highlights.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#F2EFE7]/95 backdrop-blur-md border-b border-willow/10 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="scrollToSection('hero')">
+                    <span class="text-2xl font-bold font-serif text-burgundy">Tutor.</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('about')" class="nav-item text-steeped font-medium px-1 py-2">Обо мне</button>
+                    <button onclick="scrollToSection('testimonials')" class="nav-item text-steeped font-medium px-1 py-2">Отзывы</button>
+                    <button onclick="scrollToSection('slots')" class="nav-item text-steeped font-medium px-1 py-2">Запись</button>
+                    <button onclick="scrollToSection('blog')" class="nav-item text-steeped font-medium px-1 py-2">Блог</button>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-steeped hover:text-burgundy focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-bone border-t border-willow/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="scrollToSection('about')" class="block w-full text-left px-3 py-2 text-steeped hover:bg-burgundy/10 hover:text-burgundy rounded-md">Обо мне</button>
+                <button onclick="scrollToSection('testimonials')" class="block w-full text-left px-3 py-2 text-steeped hover:bg-burgundy/10 hover:text-burgundy rounded-md">Отзывы</button>
+                <button onclick="scrollToSection('slots')" class="block w-full text-left px-3 py-2 text-steeped hover:bg-burgundy/10 hover:text-burgundy rounded-md">Запись</button>
+                <button onclick="scrollToSection('blog')" class="block w-full text-left px-3 py-2 text-steeped hover:bg-burgundy/10 hover:text-burgundy rounded-md">Блог</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-12 pb-20 lg:pt-24 lg:pb-28 overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="text-center lg:text-left order-2 lg:order-1">
+                    <div class="inline-block px-4 py-1.5 mb-6 bg-burgundy/10 text-burgundy rounded-full text-sm font-semibold tracking-wide uppercase border border-burgundy/20">
+                        Английский & Испанский
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-steeped mb-6 leading-tight font-serif">
+                        Языки для <span class="text-burgundy italic">жизни</span> и <span class="text-willow italic">будущего</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-steeped/80 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        От детей до взрослых. Современные методики, 6 лет углубленного изучения и сотни успешных уроков. Начни говорить уже сегодня.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button onclick="scrollToSection('slots')" class="px-8 py-4 bg-burgundy hover:bg-burgundyHover text-white rounded-lg font-semibold shadow-lg transition transform hover:-translate-y-1">
+                            Записаться на урок
+                        </button>
+                        <button onclick="scrollToSection('testimonials')" class="px-8 py-4 bg-white border border-willow/20 text-willow hover:bg-bone rounded-lg font-semibold shadow-sm transition">
+                            Читать отзывы (30+)
+                        </button>
+                    </div>
+                </div>
+                <!-- Image Content -->
+                <div class="order-1 lg:order-2 flex justify-center relative">
+                    <div class="relative w-72 h-72 sm:w-96 sm:h-96 lg:w-[450px] lg:h-[450px]">
+                        <!-- Decorative background blob -->
+                        <div class="absolute inset-0 bg-willow/20 rounded-[30%_70%_70%_30%/30%_30%_70%_70%] animate-[blob_7s_infinite] opacity-70 blur-xl"></div>
+                        <!-- Photo container -->
+                        <div class="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tutor Portrait" class="w-full h-full object-cover">
+                            
+                            <!-- Floating Badge -->
+                            <div class="absolute bottom-6 right-6 bg-white/95 backdrop-blur px-5 py-3 rounded-xl shadow-lg border border-willow/10">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-green-100 p-2 rounded-full text-green-700">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-willow uppercase font-bold">Опыт</p>
+                                        <p class="text-steeped font-bold">2 года преподавания</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About & Statistics Section -->
+    <section id="about" class="py-20 bg-white border-t border-willow/10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-steeped mb-4 font-serif">Опыт в цифрах</h2>
+                <p class="text-steeped/80 text-lg">
+                    Несмотря на возраст (23 года), я посвятила последние 6 лет интенсивному изучению лингвистики и методологии.
+                </p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+                
+                <!-- Chart 1: Student Demographics -->
+                <div class="bg-bone rounded-2xl p-8 shadow-sm border border-willow/10">
+                    <h3 class="text-xl font-bold text-steeped mb-2">Кого я обучаю</h3>
+                    <p class="text-sm text-willow mb-6">Распределение моих учеников по категориям</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="demographicsChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                            <span class="block text-2xl font-bold text-burgundy">18-50</span>
+                            <span class="text-xs text-willow uppercase">Возраст взрослых</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                            <span class="block text-2xl font-bold text-burgundy">7+</span>
+                            <span class="text-xs text-willow uppercase">Возраст детей</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Experience Timeline/Skills -->
+                <div class="bg-bone rounded-2xl p-8 shadow-sm border border-willow/10">
+                    <h3 class="text-xl font-bold text-steeped mb-2">Мой путь</h3>
+                    <p class="text-sm text-willow mb-6">Баланс между личным обучением и практикой</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="experienceChart"></canvas>
+                    </div>
+
+                    <div class="mt-6 bg-white p-4 rounded-xl border-l-4 border-burgundy shadow-sm">
+                        <h4 class="font-bold text-steeped mb-1">Моя философия</h4>
+                        <p class="text-willow text-sm italic">
+                            "Я не просто учу языку, я учу любить процесс. 30+ отзывов подтверждают, что этот подход работает."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-bone">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div class="max-w-xl">
+                    <h2 class="text-3xl font-bold text-steeped mb-4 font-serif">Истории успеха</h2>
+                    <p class="text-steeped/80">
+                        Более 30 учеников уже достигли своих целей. Вот что они говорят.
+                    </p>
+                </div>
+                <!-- Filters -->
+                <div class="flex gap-2 mt-6 md:mt-0 flex-wrap">
+                    <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-burgundy text-white transition hover:opacity-90" data-filter="all">Все</button>
+                    <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-willow border border-willow/20 hover:border-burgundy hover:text-burgundy transition" data-filter="kids">Дети</button>
+                    <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-willow border border-willow/20 hover:border-burgundy hover:text-burgundy transition" data-filter="adults">Взрослые</button>
+                    <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-willow border border-willow/20 hover:border-burgundy hover:text-burgundy transition" data-filter="exams">Экзамены</button>
+                </div>
+            </div>
+
+            <!-- Testimonials Grid -->
+            <div id="testimonials-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Content injected by JS -->
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="https://t.me/your_telegram_channel" target="_blank" class="inline-flex items-center gap-2 text-burgundy font-semibold hover:text-willow transition">
+                    <span>Смотреть все отзывы в Telegram канале</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Availability & Slots Section -->
+    <section id="slots" class="py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-steeped mb-4 font-serif">Форматы обучения</h2>
+                <p class="text-steeped/80">Выберите подходящий формат и забронируйте место.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Individual -->
+                <div class="card-hover bg-bone rounded-2xl p-8 border border-willow/10 flex flex-col relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-willow/10 text-willow text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Популярное</div>
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-burgundy/10 rounded-full flex items-center justify-center text-burgundy mb-4 text-xl">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-steeped">Индивидуально</h3>
+                        <p class="text-willow text-sm mt-2">Персональная программа под ваши цели и темп.</p>
+                    </div>
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Гибкое расписание
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Разбор домашних заданий
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Упор на разговорную речь
+                        </li>
+                    </ul>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-steeped mb-4">2500₽ <span class="text-sm font-normal text-willow">/ 60 мин</span></div>
+                        <a href="https://t.me/yourusername" target="_blank" class="block w-full text-center py-3 rounded-lg bg-steeped text-white font-semibold hover:bg-willow transition">Записаться</a>
+                    </div>
+                </div>
+
+                <!-- Mini Group -->
+                <div class="card-hover bg-white rounded-2xl p-8 border-2 border-burgundy flex flex-col relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-burgundy text-white text-xs font-bold px-4 py-1 rounded-full uppercase shadow-md">
+                        Осталось 2 места
+                    </div>
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 mb-4 text-xl">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-steeped">Мини-группа</h3>
+                        <p class="text-willow text-sm mt-2">Английский для подростков (B1-B2). Динамично и весело.</p>
+                    </div>
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Группа 3-4 человека
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Игровая форма
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Соревновательный эффект
+                        </li>
+                    </ul>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-steeped mb-4">1200₽ <span class="text-sm font-normal text-willow">/ 60 мин</span></div>
+                        <a href="https://t.me/yourusername" target="_blank" class="block w-full text-center py-3 rounded-lg bg-burgundy text-white font-semibold hover:bg-burgundyHover transition shadow-lg shadow-burgundy/20">Занять место</a>
+                    </div>
+                </div>
+
+                <!-- Spanish Starter -->
+                <div class="card-hover bg-bone rounded-2xl p-8 border border-willow/10 flex flex-col relative">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-700 mb-4 text-xl">
+                            <i class="fas fa-guitar"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-steeped">Испанский с нуля</h3>
+                        <p class="text-willow text-sm mt-2">Погружение в культуру и базу языка.</p>
+                    </div>
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Базовая грамматика
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Постановка произношения
+                        </li>
+                        <li class="flex items-center gap-3 text-steeped/90 text-sm">
+                            <i class="fas fa-check text-green-600"></i> Культурный контекст
+                        </li>
+                    </ul>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-steeped mb-4">2000₽ <span class="text-sm font-normal text-willow">/ 60 мин</span></div>
+                        <a href="https://t.me/yourusername" target="_blank" class="block w-full text-center py-3 rounded-lg bg-steeped text-white font-semibold hover:bg-willow transition">Записаться</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog / Methodology Preview -->
+    <section id="blog" class="py-20 bg-bone">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-steeped mb-12 text-center font-serif">Полезное в блоге</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Post 1 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer group border border-willow/5">
+                    <div class="h-48 bg-stone-200 relative overflow-hidden">
+                         <div class="absolute inset-0 bg-steeped/10 group-hover:bg-steeped/0 transition"></div>
+                         <div class="flex items-center justify-center h-full text-stone-400">
+                             <i class="fas fa-image text-3xl"></i>
+                         </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-burgundy font-bold uppercase mb-2">Советы</div>
+                        <h3 class="text-lg font-bold text-steeped mb-2 group-hover:text-burgundy transition">Как выучить 100 слов за неделю?</h3>
+                        <p class="text-willow text-sm mb-4">Методика интервальных повторений и ассоциаций...</p>
+                        <span class="text-steeped text-sm font-medium border-b border-willow/30 pb-0.5">Читать далее</span>
+                    </div>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer group border border-willow/5">
+                    <div class="h-48 bg-stone-200 relative">
+                        <div class="flex items-center justify-center h-full text-stone-400">
+                            <i class="fas fa-image text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-burgundy font-bold uppercase mb-2">Грамматика</div>
+                        <h3 class="text-lg font-bold text-steeped mb-2 group-hover:text-burgundy transition">Present Perfect простыми словами</h3>
+                        <p class="text-willow text-sm mb-4">Почему это время самое важное и как перестать его бояться...</p>
+                        <span class="text-steeped text-sm font-medium border-b border-willow/30 pb-0.5">Читать далее</span>
+                    </div>
+                </article>
+
+                <!-- Post 3 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer group border border-willow/5">
+                    <div class="h-48 bg-stone-200 relative">
+                        <div class="flex items-center justify-center h-full text-stone-400">
+                            <i class="fas fa-image text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-burgundy font-bold uppercase mb-2">Испанский</div>
+                        <h3 class="text-lg font-bold text-steeped mb-2 group-hover:text-burgundy transition">Ошибки новичков в Испанском</h3>
+                        <p class="text-willow text-sm mb-4">Топ-5 ошибок, которые выдают в вас иностранца...</p>
+                        <span class="text-steeped text-sm font-medium border-b border-willow/30 pb-0.5">Читать далее</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <section id="contact" class="py-20 bg-steeped text-bone">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 font-serif">Готовы начать?</h2>
+            <p class="text-bone/60 mb-10 max-w-xl mx-auto">
+                Запишитесь на пробный урок или задайте вопрос в Telegram. Я отвечаю в течение дня.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="https://t.me/yourusername" target="_blank" class="flex items-center gap-3 bg-burgundy hover:bg-burgundyHover text-white px-8 py-4 rounded-full font-bold transition transform hover:scale-105 shadow-lg shadow-burgundy/30">
+                    <i class="fab fa-telegram-plane text-xl"></i>
+                    Написать в Telegram
+                </a>
+                <a href="mailto:email@example.com" class="flex items-center gap-3 bg-transparent border border-bone/20 hover:border-white text-bone px-8 py-4 rounded-full font-bold transition">
+                    <i class="fas fa-envelope text-xl"></i>
+                    Написать на почту
+                </a>
+            </div>
+
+            <div class="mt-20 border-t border-bone/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-bone/40">
+                <p>&copy; 2024 Tutor Name. Все права защищены.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition">Политика конфиденциальности</a>
+                    <a href="#" class="hover:text-white transition">Договор оферты</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Definitions ---
+
+        const testimonialsData = [
+            {
+                id: 1,
+                name: "Елена",
+                role: "Мама ученика (8 лет)",
+                text: "Мой сын ненавидел английский в школе. Спустя 2 месяца занятий он сам просит включить мультики на английском! Огромное спасибо за подход.",
+                category: "kids",
+                rating: 5
+            },
+            {
+                id: 2,
+                name: "Максим",
+                role: "IT-специалист",
+                text: "Нужен был технический английский для работы. Подтянули грамматику и сняли языковой барьер. Теперь спокойно прохожу собеседования.",
+                category: "adults",
+                rating: 5
+            },
+            {
+                id: 3,
+                name: "Анна",
+                role: "Студентка",
+                text: "Готовилась к ЕГЭ. Очень боялась устной части. Разобрали все ловушки экзамена, сдала на 92 балла! Это победа.",
+                category: "exams",
+                rating: 5
+            },
+            {
+                id: 4,
+                name: "Дмитрий",
+                role: "Путешественник",
+                text: "Испанский казался сложным, но методика просто огонь. Через полгода уже мог объясняться в Барселоне.",
+                category: "adults",
+                rating: 5
+            },
+            {
+                id: 5,
+                name: "Светлана",
+                role: "Мама ученицы (14 лет)",
+                text: "Дочь стала лучше учиться в школе, оценки исправились с троек на пятерки. Очень благодарны.",
+                category: "kids",
+                rating: 5
+            },
+            {
+                id: 6,
+                name: "Игорь",
+                role: "Предприниматель",
+                text: "Коротко, ясно, по делу. Ценим мое время. Прогресс виден уже через месяц.",
+                category: "adults",
+                rating: 4
+            }
+        ];
+
+        // --- Core Functions ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderTestimonials('all');
+            setupNavigation();
+        });
+
+        // 1. Navigation Logic
+        function setupNavigation() {
+            // Mobile menu toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('mobile-menu').classList.add('hidden');
+            }
+        }
+
+        // 2. Chart.js Implementations (Colors Updated)
+        function initCharts() {
+            // Chart 1: Demographics (Doughnut)
+            const ctx1 = document.getElementById('demographicsChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Дети (7-14)', 'Подростки (14-18)', 'Взрослые (18+)'],
+                    datasets: [{
+                        data: [40, 35, 25],
+                        backgroundColor: [
+                            '#560319', // Burgundy
+                            '#3c1716', // Willow
+                            '#b0a8a6'  // Muted grey/brown
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Montserrat', size: 12 },
+                                color: '#3c1716', // Willow
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#F2EFE7',
+                            titleColor: '#2A1F1A',
+                            bodyColor: '#3c1716',
+                            borderColor: '#3c1716',
+                            borderWidth: 1,
+                            padding: 12,
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Chart 2: Experience/Timeline
+            const ctx2 = document.getElementById('experienceChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [
+                        {
+                            label: 'Интенсивность обучения (Теория)',
+                            data: [80, 90, 100, 95, 80, 60, 40],
+                            type: 'line',
+                            borderColor: '#3c1716', // Willow
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Практика преподавания (Часы)',
+                            data: [0, 10, 20, 40, 70, 90, 100],
+                            backgroundColor: '#560319', // Burgundy
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            display: false
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: 'Montserrat' },
+                                color: '#3c1716'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: 'Montserrat', size: 11 },
+                                color: '#2A1F1A'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#F2EFE7',
+                            titleColor: '#2A1F1A',
+                            bodyColor: '#3c1716',
+                            borderColor: '#3c1716',
+                            borderWidth: 1,
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Testimonial Filtering
+        function renderTestimonials(filter) {
+            const grid = document.getElementById('testimonials-grid');
+            grid.innerHTML = ''; 
+
+            const filtered = filter === 'all' 
+                ? testimonialsData 
+                : testimonialsData.filter(t => t.category === filter);
+
+            grid.classList.add('opacity-0', 'transition', 'duration-300');
+            
+            setTimeout(() => {
+                filtered.forEach(t => {
+                    const stars = Array(t.rating).fill('<i class="fas fa-star text-[#560319] text-xs"></i>').join('');
+                    
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition border border-willow/10 flex flex-col";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-bone flex items-center justify-center text-willow font-bold">
+                                ${t.name[0]}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-steeped text-sm">${t.name}</h4>
+                                <p class="text-xs text-willow">${t.role}</p>
+                            </div>
+                            <div class="ml-auto">${stars}</div>
+                        </div>
+                        <p class="text-steeped/80 text-sm italic leading-relaxed mb-4 flex-1">"${t.text}"</p>
+                        <div class="text-xs font-semibold text-burgundy uppercase tracking-wider">${getCategoryName(t.category)}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+                grid.classList.remove('opacity-0');
+            }, 150);
+        }
+
+        function getCategoryName(cat) {
+            const map = { 'kids': 'Дети', 'adults': 'Взрослые', 'exams': 'Экзамены' };
+            return map[cat] || cat;
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-burgundy', 'text-white');
+                    b.classList.add('bg-white', 'text-willow');
+                });
+                e.target.classList.remove('bg-white', 'text-willow');
+                e.target.classList.add('bg-burgundy', 'text-white');
+                
+                renderTestimonials(e.target.dataset.filter);
+            });
+        });
+
+    </script>
+</body>
+</html>
